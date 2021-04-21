@@ -26,12 +26,6 @@ class Results():
                 total_labels.append(prediction_labels.cpu().numpy())
                 results_flat = np.append(results_flat, total_labels)
 
-        # ind = []
-        # count = 1
-        #
-        # for i in enumerate(results_flat):
-        #     ind.append(count)
-        #     count = count + 1
         output_path = os.path.join(self.path,self.name)
         if not os.path.exists(self.path,):
             os.makedirs(self.path)

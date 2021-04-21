@@ -9,7 +9,7 @@ import pandas as pd
 import numpy as np
 import cv2
 import os
-
+#inspireret from my own master project https://github.com/pandagud/Master_Satelite_Image_Inpainting
 class Dataloaders():
     def __init__(self, batch_size, normalize=True, num_workers=2):
         self.batch_size = batch_size
@@ -88,10 +88,8 @@ class ImageDataset(Dataset):
 
     def __getitem__(self, i):
         image = cv2.imread(self.imageList[i], -1)
-        #image = (image / 255).astype(np.float32)
         if self.transform:
             image = self.transform(image=np.array(image))['image']
-        #image = image.transpose(2, 0, 1)
         if self.lbls is not None:
             label = self.lbls.Labels[i]-1
             sample = {'image': image, 'label': label}
