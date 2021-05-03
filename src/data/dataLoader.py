@@ -46,13 +46,12 @@ class Dataloaders():
         listValData = natsorted([os.path.join(valImgPath, f) for f in os.listdir(valImgPath)])
 
         albuTrainData = ImageDataset(imageList=listTrainData, cvsFile=trainLabels,
-                                               transform=trainTransform)
+                                     transform=trainTransform)
         albuTestData = ImageDataset(imageList=listTestData, cvsFile=None, transform=testTransform)
         albuValData = ImageDataset(imageList=listValData, cvsFile=valLabels, transform=testTransform)
 
         classes = pd.read_csv(trainLabels, header=None, names=['Labels'])
         classes = classes['Labels'].unique()
-
 
         balanced_weights = self.utils.create_weights_to_balance_classes(albuTrainData.lbls.Labels - 1, len(classes))
         balanced_weights = torch.DoubleTensor(balanced_weights)
@@ -90,6 +89,7 @@ class ImageDataset(Dataset):
         image = cv2.imread(self.imageList[i], -1)
         if self.transform:
             image = self.transform(image=np.array(image))['image']
+        #image = image.transpose(2, 0, 1)
         if self.lbls is not None:
             label = self.lbls.Labels[i]-1
             sample = {'image': image, 'label': label}

@@ -23,7 +23,6 @@ def print_hi():
     for i in models:
         working_path = Path('/workspace/CV_Jacob/Kaggle_Challenge_Computer_Vision/')
         model_name = str(i)
-        print(model_name)
         logname = str(Path.joinpath(working_path, 'Results', model_name))
         logging.basicConfig(filename=logname + '.log',
                             filemode='a',
@@ -68,3 +67,10 @@ def print_hi():
         logger.info('##################################')
         logger.info('Done')
         logger.info('##################################')
+
+
+# Press the green button in the gutter to run the script.
+if __name__ == '__main__':
+    print_hi()
+
+# See PyCharm help at https://www.jetbrains.com/help/pycharm/

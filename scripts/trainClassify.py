@@ -18,11 +18,7 @@ def main(args):
         cleaned dataLayer ready to be analyzed (saved in ../processed).
     """
     #Set logger
-    models = ['Alexnet', 'Alexnet_pretrain', 'VGG11', 'VGG11_bn', 'VGG11_pretrain', 'VGG11_pretrain_bn', 'VGG19',
-              'VGG19_bn', 'VGG19_pretrain', 'VGG19_pretrain_bn']
-    ## TEST
-    # models = ['VGG19_pretrain','VGG19_pretrain_bn']
-    ## TEST
+    models = ['Alexnet','Alexnet_pretrain','VGG16','VGG16_bn','VGG16_pretrain','VGG16_pretrain_bn','VGG19','VGG19_bn','VGG19_pretrain','VGG19_pretrain_bn']
     for i in models:
         working_path = Path(os.getcwd())
         model_name = str(i)
@@ -35,14 +31,14 @@ def main(args):
         logger = logging.getLogger(logname)
         # Params:
         batch_Size = 10
-        epochs = 100
+        epochs = 80
         # init model
         modelBase = Models(batch_Size)
         # createDataset
         curData = Dataloaders(batch_Size)
         classes, trainDataLoader, testDataLoader, valDataLoader = curData.getDataloader()
         # get assinged model
-        curModel = modelBase.getAssignedModel(model_name,len(classes))
+        curModel = modelBase.getAssignedModel(model_name,classes)
         # trainModel
         model_path = Path.joinpath(working_path, 'OutputModels', 'vgg_19.pt')
         trainingClass = trainModel(trainDataLoader, curModel, model_path, logger, epochs=epochs)

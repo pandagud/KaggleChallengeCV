@@ -22,10 +22,8 @@ class trainModel():
 
         crossELoss = nn.CrossEntropyLoss().to(device)
         optimizer = torch.optim.SGD(self.model.parameters(), lr=0.0005, momentum=0.9, weight_decay=5e-4)
-        j = 1
         for epoch in range(self.epochs):
-            curLoss= 0.0
-            for samples in tqdm(self.training,disable=True):
+            for samples in tqdm(self.training,disable=False):
 
                 sampleImages = samples['image'].to(device)
                 sampelabels = samples['label'].to(device)
@@ -35,14 +33,13 @@ class trainModel():
                 loss = crossELoss(outputs, sampelabels)
                 loss.backward()
                 optimizer.step()
-
-                curLoss += loss.item()
-                if j % 20 == 19:
-                    curLoss = 0.0
-                j = j + 1
-            print("###################################")
-            print("epoch number : " +str(epoch))
+            if epoch % 20 == 0:
+                print("###################################")
+                print("epoch number : " +str(epoch))
         torch.save(self.model, self.path)
+        # cleaning all use
+        del self.model
+        del loss
         self.logger.info('Trained for ' +str(epoch)+' epochs')
         return self.path
 

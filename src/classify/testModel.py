@@ -22,7 +22,7 @@ class testModel():
         tracemalloc.start()
         start = time.time()
         with torch.no_grad():
-            for samples in tqdm(self.test_images ):
+            for samples in tqdm(self.test_images,disable=True ):
 
                 sampleImages = samples['image'].to(device)
                 sampelabels = samples['label'].to(device)
@@ -37,15 +37,16 @@ class testModel():
                     class_correct[label] += c[i].item()
                     class_total[label] += 1
         end = time.time()
+        total_time = end-start
         current, peak = tracemalloc.get_traced_memory()
         tracemalloc.stop()
         self.logger.info('The score of the selected classifier on the val images is: %d %%' % (100 * correct_prediction / total_prediction))
         for i in range(len(self.classes)):
             self.logger.info('The accuracy for the %5s : %2d %%' % (
                 self.classes[i], 100 * class_correct[i] / class_total[i]))
-        self.logger.info("The amount of time it took classifying was " + str(end-start))
+        self.logger.info("The amount of time it took classifying was " + str(total_time))
         total_images = len(self.test_images.dataset.imageList)
-        pr_img = total_images / time ## Time is in seconds
+        pr_img = total_images / total_time ## Time is in seconds
         current = current / 10 ** 6  ## Getting in MB
         peak = peak / 10 ** 6  ## Getting in MB
         self.logger.info('The total amount of images it classifed is ' + str(total_images))
@@ -53,3 +54,4 @@ class testModel():
         self.logger.info('Current used in MB ' + str(current))
         self.logger.info('With a peak at ' + str(peak))
         self.logger.info('Giving us a current pr image at ' + str(total_images/current) + ' in image/MB')
+        del self.model
